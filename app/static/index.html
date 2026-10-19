@@ -3,35 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StudyAI — Your Personal Study Assistant</title>
+    <title>StudyAI - AI Study Assistant</title>
 
     <style>
         :root {
-            --bg: #f5f7fb;
+            --bg: #f5f6fb;
             --panel: #ffffff;
-            --text: #172033;
-            --muted: #697386;
-            --border: #e3e8f0;
-            --primary: #635bff;
-            --primary-hover: #5048e5;
-            --user-bg: #635bff;
-            --assistant-bg: #f0f2f8;
-            --input-bg: #ffffff;
-            --shadow: 0 8px 30px rgba(25, 35, 60, 0.07);
+            --text: #1c2333;
+            --muted: #687086;
+            --border: #e1e5ee;
+            --accent: #6558e8;
+            --accent-hover: #5145d0;
+            --soft: #eeecff;
+            --assistant: #f0f2f8;
         }
 
         body.dark {
-            --bg: #10131b;
-            --panel: #191e29;
-            --text: #edf0f7;
-            --muted: #a0a9bb;
-            --border: #303849;
-            --primary: #817bff;
-            --primary-hover: #7069f0;
-            --user-bg: #6259df;
-            --assistant-bg: #242b39;
-            --input-bg: #191e29;
-            --shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+            --bg: #111522;
+            --panel: #191e2d;
+            --text: #edf0fa;
+            --muted: #a0a8bf;
+            --border: #30374b;
+            --accent: #8d82ff;
+            --accent-hover: #a39aff;
+            --soft: #302c50;
+            --assistant: #22283a;
         }
 
         * {
@@ -40,7 +36,7 @@
 
         body {
             margin: 0;
-            font-family: "Segoe UI", Arial, sans-serif;
+            font-family: Arial, Helvetica, sans-serif;
             background: var(--bg);
             color: var(--text);
             transition: background 0.2s, color 0.2s;
@@ -54,39 +50,44 @@
             cursor: pointer;
         }
 
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
         .app {
-            display: flex;
+            display: grid;
+            grid-template-columns: 270px minmax(0, 1fr);
             min-height: 100vh;
         }
 
+        /* Sidebar */
+
         .sidebar {
-            width: 270px;
-            flex-shrink: 0;
+            padding: 22px 16px;
             background: var(--panel);
             border-right: 1px solid var(--border);
-            padding: 22px 16px;
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 22px;
         }
 
         .brand {
             display: flex;
             align-items: center;
             gap: 12px;
-            padding: 4px 8px;
+            padding: 0 6px;
         }
 
         .brand-icon {
+            width: 44px;
+            height: 44px;
             display: grid;
             place-items: center;
-            width: 42px;
-            height: 42px;
-            border-radius: 13px;
-            background: var(--primary);
+            background: var(--accent);
             color: white;
-            font-size: 22px;
-            font-weight: 700;
+            border-radius: 14px;
+            font-size: 24px;
         }
 
         .brand h1 {
@@ -96,96 +97,150 @@
 
         .brand p {
             margin: 3px 0 0;
-            color: var(--muted);
             font-size: 12px;
+            color: var(--muted);
+        }
+
+        .primary-btn {
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 11px;
+            padding: 12px 15px;
+            font-weight: bold;
+        }
+
+        .primary-btn:hover {
+            background: var(--accent-hover);
+        }
+
+        .new-chat {
+            width: 100%;
+            text-align: left;
         }
 
         .section-title {
-            margin: 0 0 10px;
-            font-size: 12px;
-            text-transform: uppercase;
+            margin: 0 0 10px 5px;
+            font-size: 11px;
+            color: var(--muted);
+            font-weight: bold;
             letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .upload-box {
+            padding: 18px 10px;
+            text-align: center;
+            border: 2px dashed var(--border);
+            border-radius: 12px;
+            background: var(--bg);
+            cursor: pointer;
+        }
+
+        .upload-box:hover {
+            border-color: var(--accent);
+        }
+
+        .upload-box strong {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 13px;
+        }
+
+        .upload-box small {
             color: var(--muted);
-            font-weight: 700;
+            font-size: 11px;
         }
 
-        .panel-card {
-            border: 1px solid var(--border);
-            border-radius: 14px;
-            padding: 14px;
-            background: var(--panel);
+        #fileInput {
+            display: none;
         }
 
-        .upload-button,
-        .primary-button {
+        select {
             width: 100%;
-            border: 0;
-            background: var(--primary);
-            color: white;
-            border-radius: 10px;
-            padding: 11px 14px;
-            font-weight: 600;
-            transition: background 0.2s;
-        }
-
-        .upload-button:hover,
-        .primary-button:hover {
-            background: var(--primary-hover);
-        }
-
-        .upload-description {
-            color: var(--muted);
-            font-size: 12px;
-            line-height: 1.5;
-            margin: 10px 0 0;
-        }
-
-        .document-select {
-            width: 100%;
-            margin-top: 12px;
             padding: 10px;
             border: 1px solid var(--border);
-            border-radius: 9px;
+            background: var(--panel);
             color: var(--text);
-            background: var(--input-bg);
+            border-radius: 9px;
+            margin-top: 10px;
         }
 
-        .file-status {
+        .document-list,
+        .history-list {
+            display: grid;
+            gap: 7px;
             margin-top: 10px;
-            font-size: 12px;
-            line-height: 1.5;
-            color: var(--muted);
+        }
+
+        .document-item,
+        .history-item {
+            padding: 10px;
+            text-align: left;
+            border: 1px solid transparent;
+            background: transparent;
+            color: var(--text);
+            border-radius: 9px;
             overflow-wrap: anywhere;
         }
 
-        .sidebar-actions {
-            display: grid;
-            gap: 8px;
+        .document-item:hover,
+        .history-item:hover {
+            background: var(--bg);
         }
 
-        .secondary-button {
-            width: 100%;
-            border: 1px solid var(--border);
-            color: var(--text);
-            background: var(--panel);
-            border-radius: 9px;
-            padding: 10px;
+        .document-item.active,
+        .history-item.active {
+            background: var(--soft);
+            border-color: var(--accent);
         }
 
-        .secondary-button:hover {
-            background: var(--assistant-bg);
-        }
-
-        .sidebar-footer {
-            margin-top: auto;
+        .empty-label {
             color: var(--muted);
             font-size: 12px;
-            line-height: 1.6;
-            padding: 8px;
+            padding: 5px;
         }
 
+        .sidebar-bottom {
+            margin-top: auto;
+            border-top: 1px solid var(--border);
+            padding-top: 15px;
+        }
+
+        .health {
+            color: var(--muted);
+            font-size: 12px;
+            margin-bottom: 12px;
+        }
+
+        .health-dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background: #999;
+            border-radius: 50%;
+            margin-right: 6px;
+        }
+
+        .health-dot.online {
+            background: #21a675;
+        }
+
+        .health-dot.offline {
+            background: #dc4455;
+        }
+
+        .secondary-btn {
+            padding: 9px 10px;
+            background: var(--panel);
+            color: var(--text);
+            border: 1px solid var(--border);
+            border-radius: 9px;
+        }
+
+        /* Main panel */
+
         .main {
-            flex: 1;
             min-width: 0;
             display: flex;
             flex-direction: column;
@@ -193,427 +248,319 @@
         }
 
         .topbar {
-            height: 72px;
-            flex-shrink: 0;
-            border-bottom: 1px solid var(--border);
-            background: var(--panel);
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0 28px;
+            gap: 10px;
+            padding: 18px 25px;
+            background: var(--panel);
+            border-bottom: 1px solid var(--border);
         }
 
-        .topbar-title {
+        .topbar h2 {
+            margin: 0;
             font-size: 17px;
-            font-weight: 700;
         }
 
-        .topbar-subtitle {
-            margin-top: 4px;
-            font-size: 12px;
+        .topbar p {
             color: var(--muted);
+            font-size: 12px;
+            margin: 4px 0 0;
         }
 
-        .topbar-actions {
-            display: flex;
-            gap: 8px;
-        }
-
-        .icon-button {
-            border: 1px solid var(--border);
+        .icon-btn {
+            width: 42px;
+            height: 42px;
             background: var(--panel);
             color: var(--text);
-            border-radius: 10px;
-            padding: 9px 12px;
+            border: 1px solid var(--border);
+            border-radius: 11px;
+        }
+
+        .mobile-menu {
+            display: none;
         }
 
         .chat-area {
-            width: 100%;
-            max-width: 980px;
-            margin: 0 auto;
-            padding: 28px 24px 20px;
+            width: min(900px, 100%);
+            margin: auto;
+            padding: 25px;
             flex: 1;
-            display: flex;
-            flex-direction: column;
         }
 
         .welcome {
             text-align: center;
-            margin: 40px auto 30px;
-            max-width: 600px;
+            padding: 8vh 10px 30px;
         }
 
         .welcome-icon {
-            width: 68px;
-            height: 68px;
-            border-radius: 22px;
-            background: rgba(99, 91, 255, 0.12);
             display: grid;
             place-items: center;
-            margin: 0 auto 18px;
-            font-size: 34px;
+            width: 65px;
+            height: 65px;
+            background: var(--soft);
+            color: var(--accent);
+            border-radius: 20px;
+            font-size: 30px;
+            margin: 0 auto 20px;
         }
 
         .welcome h2 {
-            font-size: 29px;
-            margin: 0 0 12px;
+            font-size: 32px;
+            margin: 0 0 10px;
         }
 
         .welcome p {
+            max-width: 500px;
+            margin: auto;
             color: var(--muted);
             line-height: 1.7;
-            margin: 0;
         }
 
         .suggestions {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 9px;
-            margin-top: 20px;
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+            max-width: 650px;
+            margin: 25px auto;
         }
 
         .suggestion {
-            border: 1px solid var(--border);
-            color: var(--text);
+            padding: 15px;
             background: var(--panel);
-            border-radius: 20px;
-            padding: 9px 13px;
-            font-size: 13px;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            text-align: left;
+            color: var(--text);
         }
 
         .suggestion:hover {
-            border-color: var(--primary);
+            border-color: var(--accent);
         }
 
+        .suggestion strong {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 13px;
+        }
+
+        .suggestion span {
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        /* Messages */
+
         .messages {
-            display: flex;
-            flex-direction: column;
+            display: grid;
             gap: 22px;
+            padding-bottom: 25px;
         }
 
         .message {
             display: flex;
             align-items: flex-start;
             gap: 12px;
-            animation: appear 0.2s ease;
         }
 
-        @keyframes appear {
-            from {
-                opacity: 0;
-                transform: translateY(5px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .message.user {
+            flex-direction: row-reverse;
         }
 
         .avatar {
-            width: 35px;
-            height: 35px;
-            flex-shrink: 0;
-            border-radius: 11px;
+            width: 36px;
+            height: 36px;
+            flex: 0 0 36px;
             display: grid;
             place-items: center;
-            font-weight: 700;
-            font-size: 13px;
+            border-radius: 11px;
+            background: var(--soft);
+            color: var(--accent);
+            font-weight: bold;
         }
 
-        .assistant-avatar {
-            background: var(--primary);
+        .message.user .avatar {
+            background: var(--accent);
             color: white;
-        }
-
-        .user-avatar {
-            background: #dce2f0;
-            color: #34405c;
         }
 
         .message-content {
+            max-width: calc(100% - 48px);
             min-width: 0;
-            flex: 1;
         }
 
-        .message-author {
-            font-size: 12px;
+        .message-meta {
             color: var(--muted);
-            margin: 2px 0 7px;
-            font-weight: 600;
+            font-size: 11px;
+            margin: 0 2px 6px;
         }
 
-        .message-text {
-            line-height: 1.75;
-            overflow-wrap: anywhere;
+        .bubble {
+            padding: 13px 15px;
+            background: var(--assistant);
+            border-radius: 4px 15px 15px 15px;
             white-space: pre-wrap;
+            overflow-wrap: anywhere;
+            line-height: 1.65;
         }
 
-        .user-bubble {
-            display: inline-block;
-            max-width: 100%;
-            background: var(--user-bg);
+        .message.user .bubble {
+            background: var(--accent);
             color: white;
-            padding: 11px 15px;
-            border-radius: 14px 14px 3px 14px;
-            white-space: pre-wrap;
-            line-height: 1.6;
-            overflow-wrap: anywhere;
+            border-radius: 15px 4px 15px 15px;
         }
 
         .sources {
-            margin-top: 15px;
+            margin-top: 10px;
+            padding: 10px;
             border: 1px solid var(--border);
-            border-radius: 12px;
-            overflow: hidden;
+            border-radius: 10px;
+            font-size: 12px;
         }
 
         .sources summary {
-            padding: 12px 14px;
             cursor: pointer;
-            font-size: 13px;
-            font-weight: 700;
-            background: var(--assistant-bg);
-        }
-
-        .source-list {
-            padding: 10px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .source-item {
-            border: 1px solid var(--border);
-            border-radius: 9px;
-            padding: 12px;
-            min-width: 0;
-        }
-
-        .source-heading {
-            font-weight: 700;
-            font-size: 13px;
-            overflow-wrap: anywhere;
-        }
-
-        .source-meta {
             color: var(--muted);
-            font-size: 11px;
-            margin-top: 5px;
-            line-height: 1.6;
-            overflow-wrap: anywhere;
         }
 
-        .page-citation {
-            display: inline-block;
-            margin-top: 9px;
-            padding: 6px 9px;
-            background: rgba(99, 91, 255, 0.12);
-            color: var(--primary);
-            border-radius: 7px;
-            font-size: 12px;
-            font-weight: 700;
+        .source-entry {
+            border-top: 1px solid var(--border);
+            padding-top: 8px;
+            margin-top: 8px;
         }
 
-        .source-text {
-            margin-top: 10px;
-            padding: 10px;
-            background: var(--assistant-bg);
-            border-radius: 8px;
+        .source-entry small {
+            display: block;
             color: var(--muted);
-            font-size: 12px;
-            line-height: 1.6;
-            white-space: pre-wrap;
-            overflow-wrap: anywhere;
+            margin-top: 4px;
         }
+
+        /* Composer */
 
         .composer-wrap {
-            position: sticky;
-            bottom: 0;
-            background: var(--bg);
-            padding: 12px 0 5px;
-            margin-top: auto;
+            padding: 12px 20px 20px;
         }
 
         .composer {
+            width: min(850px, 100%);
+            margin: auto;
+        }
+
+        .input-box {
             display: flex;
             align-items: flex-end;
             gap: 10px;
             padding: 10px;
+            background: var(--panel);
             border: 1px solid var(--border);
-            border-radius: 16px;
-            background: var(--input-bg);
-            box-shadow: var(--shadow);
+            border-radius: 17px;
+            box-shadow: 0 5px 25px rgba(20, 30, 60, 0.05);
         }
 
-        .question-input {
+        #questionInput {
             flex: 1;
             min-width: 0;
-            resize: none;
-            border: 0;
-            outline: 0;
+            min-height: 44px;
+            max-height: 170px;
+            resize: vertical;
+            padding: 12px;
             background: transparent;
+            border: none;
+            outline: none;
             color: var(--text);
-            padding: 9px 7px;
-            min-height: 42px;
-            max-height: 180px;
-            line-height: 1.5;
         }
 
-        .question-input::placeholder {
-            color: var(--muted);
-        }
-
-        .send-button {
-            flex-shrink: 0;
-            border: 0;
-            border-radius: 11px;
-            background: var(--primary);
-            color: white;
-            padding: 11px 17px;
-            font-weight: 700;
-        }
-
-        .send-button:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
+        .send-btn {
+            width: 45px;
+            height: 45px;
+            flex: 0 0 45px;
+            font-size: 19px;
         }
 
         .composer-note {
             text-align: center;
             color: var(--muted);
             font-size: 11px;
-            margin-top: 10px;
+            margin: 10px 0 0;
+        }
+
+        .notice {
+            display: none;
+            max-width: 850px;
+            margin: 0 auto 12px;
+            padding: 11px 14px;
+            border-radius: 10px;
+            font-size: 13px;
+            overflow-wrap: anywhere;
+        }
+
+        .notice.show {
+            display: block;
+        }
+
+        .notice.error {
+            background: #ffe9ec;
+            color: #a72135;
+        }
+
+        .notice.success {
+            background: #e3f8ed;
+            color: #126b47;
         }
 
         .typing {
             color: var(--muted);
             font-size: 13px;
-            padding: 8px 0;
         }
 
-        .toast {
-            position: fixed;
-            bottom: 25px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: var(--text);
-            color: var(--panel);
-            border-radius: 10px;
-            padding: 12px 17px;
-            font-size: 13px;
-            box-shadow: var(--shadow);
-            z-index: 100;
-            max-width: calc(100vw - 30px);
-        }
-
-        .hidden {
-            display: none !important;
-        }
-
-        @media (max-width: 850px) {
-            .sidebar {
-                width: 230px;
-            }
-
-            .topbar {
-                padding: 0 18px;
-            }
-
-            .chat-area {
-                padding: 22px 17px;
-            }
-        }
-
-        @media (max-width: 650px) {
+        @media (max-width: 800px) {
             .app {
-                display: block;
+                grid-template-columns: 1fr;
             }
 
             .sidebar {
-                width: 100%;
-                padding: 12px 14px;
-                border-right: 0;
-                border-bottom: 1px solid var(--border);
-                gap: 12px;
+                position: fixed;
+                z-index: 10;
+                inset: 0 auto 0 0;
+                width: min(290px, 85vw);
+                transform: translateX(-105%);
+                transition: transform 0.2s;
+                overflow-y: auto;
+                box-shadow: 0 0 30px rgba(0, 0, 0, 0.15);
             }
 
-            .brand {
-                padding: 0 4px;
+            .sidebar.open {
+                transform: translateX(0);
             }
 
-            .brand-icon {
-                width: 36px;
-                height: 36px;
-            }
-
-            .brand h1 {
-                font-size: 18px;
-            }
-
-            .sidebar .section-title,
-            .sidebar-footer {
-                display: none;
-            }
-
-            .panel-card {
-                padding: 10px;
-            }
-
-            .upload-description {
-                display: none;
-            }
-
-            .sidebar-actions {
-                grid-template-columns: 1fr 1fr;
+            .mobile-menu {
+                display: inline-block;
             }
 
             .topbar {
-                height: 60px;
-                padding: 0 14px;
-            }
-
-            .topbar-title {
-                font-size: 15px;
-            }
-
-            .topbar-subtitle {
-                font-size: 11px;
+                padding: 14px;
             }
 
             .chat-area {
-                padding: 15px 13px;
-                min-height: 65vh;
+                padding: 16px;
             }
 
             .welcome {
-                margin: 25px auto;
+                padding-top: 5vh;
+            }
+        }
+
+        @media (max-width: 500px) {
+            .suggestions {
+                grid-template-columns: 1fr;
             }
 
             .welcome h2 {
-                font-size: 24px;
+                font-size: 26px;
             }
 
-            .welcome p {
-                font-size: 14px;
-            }
-
-            .message {
-                gap: 8px;
-            }
-
-            .avatar {
-                width: 30px;
-                height: 30px;
-            }
-
-            .composer {
-                gap: 6px;
-                padding: 7px;
-            }
-
-            .send-button {
-                padding: 11px 12px;
+            .composer-wrap {
+                padding: 10px;
             }
         }
     </style>
@@ -622,7 +569,7 @@
 <body>
 <div class="app">
 
-    <aside class="sidebar">
+    <aside class="sidebar" id="sidebar">
         <div class="brand">
             <div class="brand-icon">✦</div>
             <div>
@@ -631,368 +578,368 @@
             </div>
         </div>
 
+        <button class="primary-btn new-chat" id="newChatBtn">
+            ＋ New chat
+        </button>
+
         <section>
             <p class="section-title">Your documents</p>
 
-            <div class="panel-card">
-                <input
-                    type="file"
-                    id="fileInput"
-                    accept=".pdf,.txt"
-                    class="hidden"
-                >
+            <label class="upload-box" for="fileInput">
+                <strong>⇧ Upload study material</strong>
+                <small>PDF or TXT · Maximum 10 MB</small>
+            </label>
 
-                <button
-                    class="upload-button"
-                    id="uploadButton"
-                    type="button"
-                >
-                    ＋ Upload PDF or TXT
-                </button>
+            <input id="fileInput" type="file" accept=".pdf,.txt">
 
-                <p class="upload-description">
-                    Upload notes or textbooks and ask questions about their
-                    contents. PDF page citations are shown when available.
-                </p>
+            <select id="documentSelect" aria-label="Select document">
+                <option value="">All documents</option>
+            </select>
 
-                <label for="documentSelect"
-                       style="display:block;margin-top:14px;font-size:12px;font-weight:600;">
-                    Search in
-                </label>
-
-                <select id="documentSelect" class="document-select">
-                    <option value="">All documents</option>
-                </select>
-
-                <div id="fileStatus" class="file-status">
-                    No new file uploaded in this session.
-                </div>
+            <div class="document-list" id="documentList">
+                <div class="empty-label">No documents uploaded yet.</div>
             </div>
         </section>
 
-        <div class="sidebar-actions">
-            <button id="newChatButton" class="secondary-button" type="button">
-                ＋ New chat
+        <section>
+            <p class="section-title">Recent chats</p>
+            <div class="history-list" id="historyList"></div>
+        </section>
+
+        <div class="sidebar-bottom">
+            <div class="health">
+                <span class="health-dot" id="healthDot"></span>
+                <span id="healthText">Checking API...</span>
+            </div>
+
+            <button class="secondary-btn" id="checkHealthBtn">
+                Check API
             </button>
 
-            <button id="clearHistoryButton" class="secondary-button" type="button">
-                Clear history
+            <button class="secondary-btn" id="clearHistoryBtn">
+                Clear chats
             </button>
-        </div>
-
-        <div class="sidebar-footer">
-            <strong>StudyAI</strong><br>
-            Powered by your local RAG application.<br>
-            Answers are generated using your configured backend.
         </div>
     </aside>
 
     <main class="main">
         <header class="topbar">
-            <div>
-                <div class="topbar-title">Study workspace</div>
-                <div class="topbar-subtitle" id="workspaceStatus">
-                    Ready to help you learn
+            <div style="display:flex;align-items:center;gap:10px">
+                <button class="icon-btn mobile-menu" id="menuBtn"
+                        aria-label="Open menu">☰</button>
+                <div>
+                    <h2>AI Study Assistant</h2>
+                    <p id="contextLabel">Ask questions about your notes</p>
                 </div>
             </div>
 
-            <div class="topbar-actions">
-                <button id="healthButton" class="icon-button" type="button"
-                        title="Check backend status">
-                    ● Status
-                </button>
-
-                <button id="themeButton" class="icon-button" type="button"
-                        title="Toggle light/dark theme">
-                    🌙
-                </button>
-            </div>
+            <button class="icon-btn" id="themeBtn"
+                    aria-label="Toggle dark mode">☾</button>
         </header>
 
         <section class="chat-area">
-            <div id="welcome" class="welcome">
-                <div class="welcome-icon">📚</div>
-                <h2>What would you like to learn?</h2>
+            <div class="welcome" id="welcome">
+                <div class="welcome-icon">✦</div>
+
+                <h2>What are you learning today?</h2>
+
                 <p>
-                    Ask questions about your notes, understand difficult
-                    concepts, or summarize your study material.
+                    Upload your notes, ask questions, and get clear
+                    explanations based on your study material.
                 </p>
 
                 <div class="suggestions">
-                    <button class="suggestion" type="button"
-                            data-question="Summarize the main topics in my documents.">
-                        Summarize my notes
+                    <button class="suggestion"
+                            data-prompt="Summarize my study material in simple exam-ready points.">
+                        <strong>📝 Summarize my notes</strong>
+                        <span>Get the important ideas quickly</span>
                     </button>
 
-                    <button class="suggestion" type="button"
-                            data-question="Explain the most important concepts simply.">
-                        Explain key concepts
+                    <button class="suggestion"
+                            data-prompt="Explain the important concepts step by step in simple language.">
+                        <strong>💡 Explain a concept</strong>
+                        <span>Understand it one step at a time</span>
                     </button>
 
-                    <button class="suggestion" type="button"
-                            data-question="Create exam-style questions from my documents.">
-                        Generate exam questions
+                    <button class="suggestion"
+                            data-prompt="Create five important exam questions with answers from my study material.">
+                        <strong>🎯 Prepare for exams</strong>
+                        <span>Practice questions and answers</span>
                     </button>
 
-                    <button class="suggestion" type="button"
-                            data-question="Give me a step-by-step explanation of the topic.">
-                        Step-by-step explanation
+                    <button class="suggestion"
+                            data-prompt="Create a short revision sheet with definitions, formulas, and important points.">
+                        <strong>⚡ Make a revision sheet</strong>
+                        <span>Review the essentials</span>
                     </button>
                 </div>
             </div>
 
-            <div id="messages" class="messages"></div>
-
-            <div id="typingIndicator" class="typing hidden">
-                StudyAI is thinking…
-            </div>
-
-            <div class="composer-wrap">
-                <form id="chatForm" class="composer">
-                    <textarea
-                        id="questionInput"
-                        class="question-input"
-                        placeholder="Ask a question about your documents…"
-                        rows="1"
-                        required
-                    ></textarea>
-
-                    <button
-                        id="sendButton"
-                        class="send-button"
-                        type="submit"
-                    >
-                        Send ↑
-                    </button>
-                </form>
-
-                <div class="composer-note">
-                    Check the source details and PDF page citations to verify answers.
-                </div>
-            </div>
+            <div class="messages" id="messages" aria-live="polite"></div>
         </section>
+
+        <div class="composer-wrap">
+            <div class="notice" id="notice" role="status"></div>
+
+            <form class="composer" id="chatForm">
+                <div class="input-box">
+                    <textarea id="questionInput"
+                              rows="1"
+                              placeholder="Ask a question..."
+                              aria-label="Your question"
+                              required></textarea>
+
+                    <button class="primary-btn send-btn"
+                            id="sendBtn"
+                            type="submit"
+                            aria-label="Send question">➤</button>
+                </div>
+
+                <p class="composer-note">
+                    StudyAI can make mistakes. Verify important answers.
+                </p>
+            </form>
+        </div>
     </main>
 </div>
-
-<div id="toast" class="toast hidden" role="status"></div>
 
 <script>
 "use strict";
 
-/* -------------------- Configuration -------------------- */
-
+/*
+ * The page and FastAPI backend should be served from the same origin.
+ * API_BASE is empty so requests go to the current host.
+ */
 const API_BASE = "";
 
-const STORAGE_KEYS = {
-    chat: "ai_study_assistant_chat",
+const STORAGE = {
     theme: "ai_study_assistant_theme",
-    files: "ai_study_assistant_uploaded_files",
-    selected: "ai_study_assistant_selected_document"
+    documents: "ai_study_assistant_uploaded_files",
+    selected: "ai_study_assistant_selected_document",
+    chats: "ai_study_assistant_chat"
 };
 
-const MAX_UPLOAD_BYTES = 10 * 1024 * 1024;
+const $ = id => document.getElementById(id);
 
-let isWaiting = false;
-let toastTimer = null;
+const ui = {
+    sidebar: $("sidebar"),
+    menuBtn: $("menuBtn"),
+    newChatBtn: $("newChatBtn"),
+    fileInput: $("fileInput"),
+    documentSelect: $("documentSelect"),
+    documentList: $("documentList"),
+    historyList: $("historyList"),
+    healthDot: $("healthDot"),
+    healthText: $("healthText"),
+    checkHealthBtn: $("checkHealthBtn"),
+    clearHistoryBtn: $("clearHistoryBtn"),
+    themeBtn: $("themeBtn"),
+    contextLabel: $("contextLabel"),
+    welcome: $("welcome"),
+    messages: $("messages"),
+    chatForm: $("chatForm"),
+    questionInput: $("questionInput"),
+    sendBtn: $("sendBtn"),
+    notice: $("notice")
+};
 
-
-/* -------------------- DOM elements -------------------- */
-
-const fileInput = document.getElementById("fileInput");
-const uploadButton = document.getElementById("uploadButton");
-const fileStatus = document.getElementById("fileStatus");
-const documentSelect = document.getElementById("documentSelect");
-
-const messagesContainer = document.getElementById("messages");
-const welcome = document.getElementById("welcome");
-const typingIndicator = document.getElementById("typingIndicator");
-
-const chatForm = document.getElementById("chatForm");
-const questionInput = document.getElementById("questionInput");
-const sendButton = document.getElementById("sendButton");
-
-const themeButton = document.getElementById("themeButton");
-const healthButton = document.getElementById("healthButton");
-const workspaceStatus = document.getElementById("workspaceStatus");
-
-const newChatButton = document.getElementById("newChatButton");
-const clearHistoryButton = document.getElementById("clearHistoryButton");
-const toast = document.getElementById("toast");
-
-
-/* -------------------- Safe storage helpers -------------------- */
-
-function readJSON(key, fallback) {
+function readStorage(key, fallback) {
     try {
-        const value = localStorage.getItem(key);
-
-        if (value === null) {
-            return fallback;
-        }
-
-        return JSON.parse(value);
+        const value = JSON.parse(localStorage.getItem(key));
+        return value === null ? fallback : value;
     } catch (error) {
-        console.warn("Could not read local storage:", error);
         return fallback;
     }
 }
 
-function saveJSON(key, value) {
+let documents = readStorage(STORAGE.documents, []);
+let selectedDocumentId = readStorage(STORAGE.selected, "");
+let chats = readStorage(STORAGE.chats, []);
+let currentChatId = null;
+let noticeTimer = null;
+
+function saveStorage() {
     try {
-        localStorage.setItem(key, JSON.stringify(value));
+        localStorage.setItem(STORAGE.documents, JSON.stringify(documents));
+        localStorage.setItem(STORAGE.selected, JSON.stringify(selectedDocumentId));
+        localStorage.setItem(STORAGE.chats, JSON.stringify(chats));
     } catch (error) {
-        console.warn("Could not save local storage:", error);
-        showToast("Browser storage is unavailable or full.");
+        console.warn("Could not save local data:", error);
     }
 }
 
-function getChatHistory() {
-    const history = readJSON(STORAGE_KEYS.chat, []);
-    return Array.isArray(history) ? history : [];
+function makeId() {
+    if (window.crypto && typeof window.crypto.randomUUID === "function") {
+        return window.crypto.randomUUID();
+    }
+    return Date.now() + "-" + Math.random().toString(16).slice(2);
 }
 
-function getUploadedFiles() {
-    const files = readJSON(STORAGE_KEYS.files, []);
-    return Array.isArray(files) ? files : [];
+function showNotice(message, type = "success") {
+    clearTimeout(noticeTimer);
+    ui.notice.textContent = message;
+    ui.notice.className = "notice show " + type;
+
+    noticeTimer = setTimeout(() => {
+        ui.notice.className = "notice";
+    }, 6000);
 }
 
+async function apiFetch(path, options = {}) {
+    const response = await fetch(API_BASE + path, options);
+    const contentType = response.headers.get("content-type") || "";
 
-/* -------------------- Notifications -------------------- */
+    let data;
 
-function showToast(message, duration = 3200) {
-    toast.textContent = message;
-    toast.classList.remove("hidden");
-
-    if (toastTimer) {
-        clearTimeout(toastTimer);
+    if (contentType.includes("application/json")) {
+        data = await response.json();
+    } else {
+        data = await response.text();
     }
 
-    toastTimer = setTimeout(() => {
-        toast.classList.add("hidden");
-    }, duration);
-}
+    if (!response.ok) {
+        let detail = "Request failed with status " + response.status;
 
-
-/* -------------------- Theme -------------------- */
-
-function applyTheme(theme) {
-    document.body.classList.toggle("dark", theme === "dark");
-    themeButton.textContent = theme === "dark" ? "☀️" : "🌙";
-
-    try {
-        localStorage.setItem(STORAGE_KEYS.theme, theme);
-    } catch (error) {
-        console.warn("Could not save theme.", error);
-    }
-}
-
-function initializeTheme() {
-    let theme = "light";
-
-    try {
-        theme = localStorage.getItem(STORAGE_KEYS.theme) || "light";
-    } catch (error) {
-        console.warn("Could not load theme.", error);
-    }
-
-    applyTheme(theme);
-}
-
-themeButton.addEventListener("click", () => {
-    const nextTheme = document.body.classList.contains("dark")
-        ? "light"
-        : "dark";
-
-    applyTheme(nextTheme);
-});
-
-
-/* -------------------- Document selector -------------------- */
-
-function refreshDocumentSelector() {
-    const files = getUploadedFiles();
-
-    const savedSelection = (() => {
-        try {
-            return localStorage.getItem(STORAGE_KEYS.selected) || "";
-        } catch (error) {
-            return "";
+        if (data && typeof data === "object") {
+            detail = data.detail || data.message || detail;
+        } else if (data) {
+            detail = data;
         }
-    })();
 
-    documentSelect.replaceChildren();
+        throw new Error(String(detail));
+    }
+
+    return data;
+}
+
+/* Documents */
+
+function updateContextLabel() {
+    const selected = documents.find(
+        doc => String(doc.id) === String(selectedDocumentId)
+    );
+
+    ui.contextLabel.textContent = selected
+        ? "Using: " + selected.name
+        : "Ask questions about your study material";
+}
+
+function renderDocuments() {
+    ui.documentSelect.replaceChildren();
 
     const allOption = document.createElement("option");
     allOption.value = "";
     allOption.textContent = "All documents";
-    documentSelect.appendChild(allOption);
+    ui.documentSelect.append(allOption);
 
-    for (const file of files) {
-        if (!file || !file.upload_id || !file.name) {
-            continue;
-        }
-
+    documents.forEach(doc => {
         const option = document.createElement("option");
-        option.value = String(file.upload_id);
-        option.textContent = String(file.name);
-        documentSelect.appendChild(option);
-    }
+        option.value = String(doc.id);
+        option.textContent = doc.name;
+        ui.documentSelect.append(option);
+    });
 
-    const validSelection = files.some(
-        file => file && String(file.upload_id) === savedSelection
+    const selectedExists = documents.some(
+        doc => String(doc.id) === String(selectedDocumentId)
     );
 
-    documentSelect.value = validSelection ? savedSelection : "";
-
-    updateWorkspaceStatus();
-}
-
-function getSelectedUploadId() {
-    return documentSelect.value || null;
-}
-
-function saveSelectedDocument() {
-    try {
-        localStorage.setItem(
-            STORAGE_KEYS.selected,
-            documentSelect.value || ""
-        );
-    } catch (error) {
-        console.warn("Could not save selected document.", error);
+    if (!selectedExists) {
+        selectedDocumentId = "";
     }
 
-    updateWorkspaceStatus();
-}
+    ui.documentSelect.value = String(selectedDocumentId);
+    ui.documentList.replaceChildren();
 
-function updateWorkspaceStatus() {
-    const selectedOption =
-        documentSelect.options[documentSelect.selectedIndex];
-
-    if (documentSelect.value && selectedOption) {
-        workspaceStatus.textContent =
-            "Searching in: " + selectedOption.textContent;
+    if (documents.length === 0) {
+        const empty = document.createElement("div");
+        empty.className = "empty-label";
+        empty.textContent = "No documents uploaded yet.";
+        ui.documentList.append(empty);
     } else {
-        workspaceStatus.textContent = "Searching across all documents";
+        documents.forEach(doc => {
+            const button = document.createElement("button");
+            button.type = "button";
+            button.className = "document-item";
+
+            if (String(doc.id) === String(selectedDocumentId)) {
+                button.classList.add("active");
+            }
+
+            button.textContent = "📄 " + doc.name;
+
+            button.addEventListener("click", () => {
+                selectedDocumentId = String(doc.id);
+                saveStorage();
+                renderDocuments();
+                updateContextLabel();
+                closeMobileMenu();
+            });
+
+            ui.documentList.append(button);
+        });
     }
+
+    updateContextLabel();
+    saveStorage();
 }
 
-documentSelect.addEventListener("change", saveSelectedDocument);
+/* Chats */
 
+function getCurrentChat() {
+    return chats.find(chat => chat.id === currentChatId);
+}
 
-/* -------------------- Message rendering -------------------- */
+function createChat() {
+    const chat = {
+        id: makeId(),
+        title: "New chat",
+        messages: [],
+        updatedAt: Date.now()
+    };
 
-function createElement(tag, className, text) {
-    const element = document.createElement(tag);
+    chats.unshift(chat);
+    currentChatId = chat.id;
 
-    if (className) {
-        element.className = className;
+    saveStorage();
+    renderHistory();
+    renderMessages();
+
+    return chat;
+}
+
+function renderHistory() {
+    ui.historyList.replaceChildren();
+
+    if (!chats.length) {
+        const empty = document.createElement("div");
+        empty.className = "empty-label";
+        empty.textContent = "Your chats will appear here.";
+        ui.historyList.append(empty);
+        return;
     }
 
-    if (text !== undefined && text !== null) {
-        element.textContent = String(text);
-    }
+    chats.slice()
+        .sort((a, b) => b.updatedAt - a.updatedAt)
+        .slice(0, 12)
+        .forEach(chat => {
+            const button = document.createElement("button");
+            button.type = "button";
+            button.className = "history-item";
+            button.textContent = "💬 " + (chat.title || "New chat");
 
-    return element;
+            if (chat.id === currentChatId) {
+                button.classList.add("active");
+            }
+
+            button.addEventListener("click", () => {
+                currentChatId = chat.id;
+                renderHistory();
+                renderMessages();
+                closeMobileMenu();
+            });
+
+            ui.historyList.append(button);
+        });
 }
 
 function renderSources(sources) {
@@ -1004,354 +951,193 @@ function renderSources(sources) {
     details.className = "sources";
 
     const summary = document.createElement("summary");
-    summary.textContent = `📎 Sources (${sources.length})`;
-    details.appendChild(summary);
-
-    const sourceList = document.createElement("div");
-    sourceList.className = "source-list";
+    summary.textContent = "Sources used (" + sources.length + ")";
+    details.append(summary);
 
     sources.forEach((source, index) => {
-        if (!source || typeof source !== "object") {
-            return;
+        const entry = document.createElement("div");
+        entry.className = "source-entry";
+
+        const title = document.createElement("strong");
+        title.textContent =
+            source.source ||
+            source.filename ||
+            source.document ||
+            "Source " + (index + 1);
+
+        entry.append(title);
+
+        const pageStart = source.page_start ?? source.page;
+        const pageEnd = source.page_end;
+
+        const metadata = [];
+
+        if (pageStart !== undefined && pageStart !== null) {
+            if (pageEnd !== undefined && pageEnd !== null && pageEnd !== pageStart) {
+                metadata.push("Pages " + pageStart + "–" + pageEnd);
+            } else {
+                metadata.push("Page " + pageStart);
+            }
         }
 
-        const item = document.createElement("div");
-        item.className = "source-item";
-
-        const sourceName = source.source || "Unknown document";
-        const heading = createElement(
-            "div",
-            "source-heading",
-            `${index + 1}. ${sourceName}`
-        );
-        item.appendChild(heading);
-
-        const metadataParts = [];
-
-        if (source.chunk_id !== undefined && source.chunk_id !== null) {
-            metadataParts.push(`Chunk: ${source.chunk_id}`);
+        if (source.chunk_id !== undefined) {
+            metadata.push("Chunk " + source.chunk_id);
         }
 
-        if (
-            source.distance !== undefined &&
-            source.distance !== null &&
-            Number.isFinite(Number(source.distance))
-        ) {
-            metadataParts.push(
-                `Retrieval distance: ${Number(source.distance).toFixed(4)}`
-            );
+        if (typeof source.distance === "number") {
+            metadata.push("Distance " + source.distance.toFixed(3));
         }
 
-        if (metadataParts.length > 0) {
-            item.appendChild(
-                createElement("div", "source-meta", metadataParts.join(" · "))
-            );
+        if (metadata.length) {
+            const small = document.createElement("small");
+            small.textContent = metadata.join(" · ");
+            entry.append(small);
         }
 
-        /*
-         * PDF PAGE CITATION
-         *
-         * app.py v1.7.0 returns page_start and page_end for PDF chunks.
-         * TXT documents may use page_start = 0. Old database records
-         * may not have page metadata, so no page label is shown for them.
-         */
-        const hasPageStart =
-            source.page_start !== undefined &&
-            source.page_start !== null &&
-            Number.isFinite(Number(source.page_start)) &&
-            Number(source.page_start) > 0;
-
-        const hasPageEnd =
-            source.page_end !== undefined &&
-            source.page_end !== null &&
-            Number.isFinite(Number(source.page_end)) &&
-            Number(source.page_end) > 0;
-
-        if (hasPageStart) {
-            const pageStart = Number(source.page_start);
-            const pageEnd = hasPageEnd
-                ? Number(source.page_end)
-                : pageStart;
-
-            const pageLabel = pageStart === pageEnd
-                ? `📍 PDF Page: ${pageStart}`
-                : `📍 PDF Pages: ${pageStart}–${pageEnd}`;
-
-            item.appendChild(
-                createElement("div", "page-citation", pageLabel)
-            );
-        }
-
-        if (source.text) {
-            item.appendChild(
-                createElement("div", "source-text", source.text)
-            );
-        }
-
-        sourceList.appendChild(item);
+        details.append(entry);
     });
 
-    details.appendChild(sourceList);
     return details;
 }
 
-function addMessage(role, text, sources = [], save = true) {
-    welcome.classList.add("hidden");
+function renderOneMessage(message) {
+    const wrapper = document.createElement("article");
+    wrapper.className = "message " + message.role;
 
-    const message = document.createElement("div");
-    message.className = "message";
-
-    const isUser = role === "user";
-
-    const avatar = createElement(
-        "div",
-        "avatar " + (isUser ? "user-avatar" : "assistant-avatar"),
-        isUser ? "You" : "AI"
-    );
-
-    message.appendChild(avatar);
+    const avatar = document.createElement("div");
+    avatar.className = "avatar";
+    avatar.textContent = message.role === "user" ? "Y" : "✦";
 
     const content = document.createElement("div");
     content.className = "message-content";
 
-    content.appendChild(
-        createElement(
-            "div",
-            "message-author",
-            isUser ? "You" : "StudyAI"
-        )
-    );
+    const meta = document.createElement("div");
+    meta.className = "message-meta";
+    meta.textContent = message.role === "user" ? "You" : "StudyAI";
 
-    if (isUser) {
-        content.appendChild(
-            createElement("div", "user-bubble", text)
-        );
-    } else {
-        content.appendChild(
-            createElement("div", "message-text", text)
-        );
+    const bubble = document.createElement("div");
+    bubble.className = "bubble";
+    bubble.textContent = message.content;
 
-        const sourceDetails = renderSources(sources);
+    content.append(meta, bubble);
 
-        if (sourceDetails) {
-            content.appendChild(sourceDetails);
+    if (message.role !== "user") {
+        const sources = renderSources(message.sources);
+        if (sources) {
+            content.append(sources);
         }
     }
 
-    message.appendChild(content);
-    messagesContainer.appendChild(message);
-
-    if (save) {
-        const history = getChatHistory();
-
-        history.push({
-            role,
-            text: String(text),
-            sources: Array.isArray(sources) ? sources : [],
-            timestamp: new Date().toISOString()
-        });
-
-        saveJSON(STORAGE_KEYS.chat, history);
-    }
-
-    scrollToBottom();
+    wrapper.append(avatar, content);
+    ui.messages.append(wrapper);
 }
 
-function scrollToBottom() {
-    window.scrollTo({
-        top: document.body.scrollHeight,
-        behavior: "smooth"
-    });
+function renderMessages() {
+    ui.messages.replaceChildren();
+
+    const chat = getCurrentChat();
+
+    if (!chat || !chat.messages || chat.messages.length === 0) {
+        ui.welcome.hidden = false;
+        return;
+    }
+
+    ui.welcome.hidden = true;
+    chat.messages.forEach(renderOneMessage);
 }
 
+function appendMessage(message) {
+    let chat = getCurrentChat();
 
-/* -------------------- Restore chat history -------------------- */
-
-function restoreChatHistory() {
-    const history = getChatHistory();
-
-    messagesContainer.replaceChildren();
-
-    if (history.length === 0) {
-        welcome.classList.remove("hidden");
-        return;
+    if (!chat) {
+        chat = createChat();
     }
 
-    welcome.classList.add("hidden");
+    const savedMessage = {
+        role: message.role === "user" ? "user" : "assistant",
+        content: String(message.content ?? ""),
+        sources: Array.isArray(message.sources) ? message.sources : [],
+        timestamp: Date.now()
+    };
 
-    history.forEach(entry => {
-        if (!entry || !entry.role) {
-            return;
-        }
+    chat.messages.push(savedMessage);
+    chat.updatedAt = Date.now();
 
-        addMessage(
-            entry.role,
-            entry.text || "",
-            Array.isArray(entry.sources) ? entry.sources : [],
-            false
-        );
-    });
+    if (chat.title === "New chat" && savedMessage.role === "user") {
+        chat.title = savedMessage.content.slice(0, 34) || "New chat";
+    }
+
+    saveStorage();
+    renderHistory();
+    renderOneMessage(savedMessage);
+    ui.welcome.hidden = true;
+
+    return savedMessage;
 }
 
-
-/* -------------------- Upload documents -------------------- */
-
-uploadButton.addEventListener("click", () => {
-    fileInput.click();
-});
-
-fileInput.addEventListener("change", async () => {
-    const file = fileInput.files && fileInput.files[0];
-
-    if (!file) {
-        return;
-    }
-
-    const allowedExtension = /\.(pdf|txt)$/i.test(file.name);
-
-    if (!allowedExtension) {
-        showToast("Please select a PDF or TXT file.");
-        fileInput.value = "";
-        return;
-    }
-
-    if (file.size > MAX_UPLOAD_BYTES) {
-        showToast("The file exceeds the 10 MB upload limit.");
-        fileInput.value = "";
-        return;
-    }
-
-    const formData = new FormData();
-    formData.append("file", file);
-
-    uploadButton.disabled = true;
-    uploadButton.textContent = "Uploading…";
-    fileStatus.textContent = `Uploading ${file.name}…`;
-
-    try {
-        const response = await fetch(`${API_BASE}/upload`, {
-            method: "POST",
-            body: formData
-        });
-
-        const result = await response.json().catch(() => ({}));
-
-        if (!response.ok) {
-            throw new Error(
-                result.detail ||
-                result.message ||
-                `Upload failed (${response.status}).`
-            );
-        }
-
-        if (!result.upload_id) {
-            throw new Error(
-                "The server did not return an upload_id. Check app.py."
-            );
-        }
-
-        const files = getUploadedFiles();
-
-        const uploadedFile = {
-            name: result.filename || file.name,
-            upload_id: result.upload_id,
-            chunks: result.chunks_created ?? result.chunks ?? null,
-            uploaded_at: new Date().toISOString()
-        };
-
-        const existingIndex = files.findIndex(
-            item => item && item.upload_id === uploadedFile.upload_id
-        );
-
-        if (existingIndex >= 0) {
-            files[existingIndex] = uploadedFile;
-        } else {
-            files.push(uploadedFile);
-        }
-
-        saveJSON(STORAGE_KEYS.files, files);
-
-        try {
-            localStorage.setItem(
-                STORAGE_KEYS.selected,
-                String(uploadedFile.upload_id)
-            );
-        } catch (error) {
-            console.warn("Could not save selected upload.", error);
-        }
-
-        refreshDocumentSelector();
-        documentSelect.value = String(uploadedFile.upload_id);
-        saveSelectedDocument();
-
-        const chunksText = uploadedFile.chunks !== null
-            ? `${uploadedFile.chunks} chunks created`
-            : "Document indexed";
-
-        const pageText = result.page_numbers_stored
-            ? " · PDF page citations stored"
-            : "";
-
-        fileStatus.textContent =
-            `✓ ${uploadedFile.name} — ${chunksText}${pageText}`;
-
-        showToast("Document uploaded successfully!");
-
-        addMessage(
-            "assistant",
-            `I've received "${uploadedFile.name}". ${chunksText}.\n\n` +
-            "You can now ask questions about this document. For PDFs " +
-            "uploaded with page metadata, the retrieved sources can show " +
-            "their PDF page numbers."
-        );
-
-    } catch (error) {
-        console.error("Upload error:", error);
-
-        fileStatus.textContent = `Upload failed: ${error.message}`;
-        showToast(error.message || "Upload failed.");
-    } finally {
-        uploadButton.disabled = false;
-        uploadButton.textContent = "＋ Upload PDF or TXT";
-        fileInput.value = "";
-    }
-});
-
-
-/* -------------------- Ask questions -------------------- */
-
-chatForm.addEventListener("submit", async event => {
-    event.preventDefault();
-
-    if (isWaiting) {
-        return;
-    }
-
-    const question = questionInput.value.trim();
-
-    if (!question) {
-        return;
-    }
-
-    addMessage("user", question);
-    questionInput.value = "";
-    autoResizeInput();
-
-    await askQuestion(question);
-});
+/* Ask backend */
 
 async function askQuestion(question) {
-    isWaiting = true;
-    sendButton.disabled = true;
-    typingIndicator.classList.remove("hidden");
+    const cleanQuestion = question.trim();
+
+    if (!cleanQuestion) {
+        showNotice("Please type a question first.", "error");
+        return;
+    }
+
+    if (ui.sendBtn.disabled) {
+        return;
+    }
+
+    if (!getCurrentChat()) {
+        createChat();
+    }
+
+    appendMessage({
+        role: "user",
+        content: cleanQuestion
+    });
+
+    ui.questionInput.value = "";
+    ui.sendBtn.disabled = true;
+    ui.questionInput.disabled = true;
+
+    const typing = document.createElement("article");
+    typing.className = "message";
+    typing.id = "typingIndicator";
+
+    const avatar = document.createElement("div");
+    avatar.className = "avatar";
+    avatar.textContent = "✦";
+
+    const content = document.createElement("div");
+    content.className = "message-content";
+
+    const meta = document.createElement("div");
+    meta.className = "message-meta";
+    meta.textContent = "StudyAI is thinking...";
+
+    const bubble = document.createElement("div");
+    bubble.className = "bubble";
+
+    const typingText = document.createElement("div");
+    typingText.className = "typing";
+    typingText.textContent = "Generating your answer...";
+
+    bubble.append(typingText);
+    content.append(meta, bubble);
+    typing.append(avatar, content);
+
+    ui.messages.append(typing);
+    ui.welcome.hidden = true;
 
     try {
         const payload = {
-            question,
-            upload_id: getSelectedUploadId()
+            question: cleanQuestion,
+            upload_id: selectedDocumentId || null
         };
 
-        const response = await fetch(`${API_BASE}/ask`, {
+        const data = await apiFetch("/ask", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -1359,158 +1145,264 @@ async function askQuestion(question) {
             body: JSON.stringify(payload)
         });
 
-        const result = await response.json().catch(() => ({}));
-
-        if (!response.ok) {
-            throw new Error(
-                result.detail ||
-                result.message ||
-                `Request failed (${response.status}).`
-            );
+        const indicator = $("typingIndicator");
+        if (indicator) {
+            indicator.remove();
         }
 
         const answer =
-            result.answer ||
-            result.response ||
-            result.message ||
-            "The server returned no answer.";
+            data.answer ||
+            data.response ||
+            data.message ||
+            "The API returned no answer.";
 
-        const sources = Array.isArray(result.sources)
-            ? result.sources
-            : [];
+        const sources =
+            data.sources ||
+            data.source_documents ||
+            [];
 
-        addMessage("assistant", answer, sources);
+        appendMessage({
+            role: "assistant",
+            content: String(answer),
+            sources: sources
+        });
 
     } catch (error) {
-        console.error("Question error:", error);
+        const indicator = $("typingIndicator");
+        if (indicator) {
+            indicator.remove();
+        }
 
-        addMessage(
-            "assistant",
-            `I couldn't get an answer from the backend.\n\n` +
-            `Error: ${error.message}\n\n` +
-            "Check that your FastAPI server is running and Ollama is available."
-        );
+        appendMessage({
+            role: "assistant",
+            content:
+                "I couldn't answer that question.\n\n" +
+                error.message +
+                "\n\nCheck that FastAPI and Ollama are running, then try again."
+        });
+
+        console.error("StudyAI /ask error:", error);
     } finally {
-        isWaiting = false;
-        sendButton.disabled = false;
-        typingIndicator.classList.add("hidden");
-        questionInput.focus();
+        ui.sendBtn.disabled = false;
+        ui.questionInput.disabled = false;
+        ui.questionInput.focus();
     }
 }
 
+/* Upload document */
 
-/* -------------------- Text area behaviour -------------------- */
-
-function autoResizeInput() {
-    questionInput.style.height = "auto";
-
-    questionInput.style.height =
-        Math.min(questionInput.scrollHeight, 180) + "px";
-}
-
-questionInput.addEventListener("input", autoResizeInput);
-
-questionInput.addEventListener("keydown", event => {
-    if (event.key === "Enter" && !event.shiftKey) {
-        event.preventDefault();
-        chatForm.requestSubmit();
-    }
-});
-
-
-/* -------------------- Suggested prompts -------------------- */
-
-document.querySelectorAll(".suggestion").forEach(button => {
-    button.addEventListener("click", () => {
-        questionInput.value = button.dataset.question || "";
-        autoResizeInput();
-        questionInput.focus();
-    });
-});
-
-
-/* -------------------- New chat and history -------------------- */
-
-newChatButton.addEventListener("click", () => {
-    messagesContainer.replaceChildren();
-    welcome.classList.remove("hidden");
-
-    saveJSON(STORAGE_KEYS.chat, []);
-
-    questionInput.value = "";
-    autoResizeInput();
-
-    showToast("New chat started.");
-});
-
-clearHistoryButton.addEventListener("click", () => {
-    const confirmed = window.confirm(
-        "Clear all saved chat messages in this browser? This will not delete uploaded documents from the server."
-    );
-
-    if (!confirmed) {
+async function uploadDocument(file) {
+    if (!file) {
         return;
     }
 
-    saveJSON(STORAGE_KEYS.chat, []);
-    messagesContainer.replaceChildren();
-    welcome.classList.remove("hidden");
+    if (!/\.(pdf|txt)$/i.test(file.name)) {
+        showNotice("Please select a PDF or TXT file.", "error");
+        ui.fileInput.value = "";
+        return;
+    }
 
-    showToast("Chat history cleared.");
-});
+    if (file.size > 10 * 1024 * 1024) {
+        showNotice("The file exceeds 10 MB.", "error");
+        ui.fileInput.value = "";
+        return;
+    }
 
-
-/* -------------------- Backend health check -------------------- */
-
-healthButton.addEventListener("click", checkHealth);
-
-async function checkHealth() {
-    healthButton.disabled = true;
-    healthButton.textContent = "Checking…";
+    ui.fileInput.disabled = true;
+    showNotice("Uploading " + file.name + "...", "success");
 
     try {
-        const response = await fetch(`${API_BASE}/health`, {
-            method: "GET"
+        const formData = new FormData();
+        formData.append("file", file);
+
+        const data = await apiFetch("/upload", {
+            method: "POST",
+            body: formData
         });
 
-        const result = await response.json().catch(() => ({}));
+        const id = String(
+            data.upload_id ??
+            data.id ??
+            data.filename ??
+            file.name
+        );
 
-        if (!response.ok) {
-            throw new Error(
-                result.detail || `Health check failed (${response.status}).`
-            );
+        const chunks = Number(
+            data.chunks_created ??
+            data.chunks ??
+            data.chunk_count ??
+            0
+        );
+
+        const documentInfo = {
+            id: id,
+            name: data.filename || file.name,
+            chunks: chunks,
+            uploadedAt: Date.now()
+        };
+
+        documents = documents.filter(doc => String(doc.id) !== id);
+        documents.unshift(documentInfo);
+        selectedDocumentId = id;
+
+        renderDocuments();
+
+        let message = "Uploaded " + documentInfo.name + " successfully.";
+
+        if (chunks > 0) {
+            message += " Created " + chunks + " chunks.";
         }
 
-        healthButton.textContent = "● Online";
-        showToast("Backend is responding.");
-
-        console.log("Health response:", result);
+        showNotice(message, "success");
 
     } catch (error) {
-        console.error("Health check error:", error);
-
-        healthButton.textContent = "● Offline";
-        showToast(
-            "Cannot reach /health. Check that FastAPI is running."
-        );
+        showNotice("Upload failed: " + error.message, "error");
+        console.error("StudyAI upload error:", error);
     } finally {
-        healthButton.disabled = false;
+        ui.fileInput.disabled = false;
+        ui.fileInput.value = "";
     }
 }
 
+/* API health */
 
-/* -------------------- Initialize app -------------------- */
+async function checkHealth() {
+    ui.healthText.textContent = "Checking API...";
+    ui.healthDot.className = "health-dot";
 
-function initializeApp() {
-    initializeTheme();
-    refreshDocumentSelector();
-    restoreChatHistory();
-    autoResizeInput();
-    checkHealth();
+    try {
+        const data = await apiFetch("/health");
+
+        const status = String(data.status || "ok").toLowerCase();
+        const online = ["ok", "healthy", "online"].includes(status);
+
+        ui.healthDot.className =
+            "health-dot " + (online ? "online" : "offline");
+
+        ui.healthText.textContent = online
+            ? "API connected"
+            : "API status: " + status;
+
+    } catch (error) {
+        ui.healthDot.className = "health-dot offline";
+        ui.healthText.textContent = "API unavailable";
+        console.error("Health check failed:", error);
+    }
 }
 
-initializeApp();
-</script>
+/* Theme and mobile menu */
 
+function applyTheme(theme) {
+    document.body.classList.toggle("dark", theme === "dark");
+    ui.themeBtn.textContent = theme === "dark" ? "☀" : "☾";
+
+    try {
+        localStorage.setItem(STORAGE.theme, theme);
+    } catch (error) {
+        console.warn("Could not save theme:", error);
+    }
+}
+
+function closeMobileMenu() {
+    ui.sidebar.classList.remove("open");
+}
+
+/* Event handlers */
+
+/*
+ * IMPORTANT:
+ * The form submit event is the single handler for the Send button
+ * and the Enter key. Do not put another submit listener elsewhere.
+ */
+ui.chatForm.addEventListener("submit", function (event) {
+    event.preventDefault();
+
+    if (ui.sendBtn.disabled) {
+        return;
+    }
+
+    askQuestion(ui.questionInput.value);
+});
+
+ui.questionInput.addEventListener("keydown", function (event) {
+    if (event.key === "Enter" && !event.shiftKey) {
+        event.preventDefault();
+
+        if (typeof ui.chatForm.requestSubmit === "function") {
+            ui.chatForm.requestSubmit();
+        } else {
+            ui.sendBtn.click();
+        }
+    }
+});
+
+ui.fileInput.addEventListener("change", function (event) {
+    uploadDocument(event.target.files[0]);
+});
+
+ui.documentSelect.addEventListener("change", function () {
+    selectedDocumentId = ui.documentSelect.value;
+    saveStorage();
+    renderDocuments();
+});
+
+ui.newChatBtn.addEventListener("click", function () {
+    createChat();
+    closeMobileMenu();
+});
+
+ui.checkHealthBtn.addEventListener("click", checkHealth);
+
+ui.clearHistoryBtn.addEventListener("click", function () {
+    if (!window.confirm("Delete all saved chat history from this browser?")) {
+        return;
+    }
+
+    chats = [];
+    currentChatId = null;
+
+    saveStorage();
+    renderHistory();
+    renderMessages();
+});
+
+ui.themeBtn.addEventListener("click", function () {
+    const nextTheme = document.body.classList.contains("dark")
+        ? "light"
+        : "dark";
+
+    applyTheme(nextTheme);
+});
+
+ui.menuBtn.addEventListener("click", function () {
+    ui.sidebar.classList.toggle("open");
+});
+
+document.querySelectorAll("[data-prompt]").forEach(function (button) {
+    button.addEventListener("click", function () {
+        ui.questionInput.value = button.dataset.prompt;
+        ui.questionInput.focus();
+    });
+});
+
+/* Initialize page */
+
+(function initializeStudyAI() {
+    const savedTheme = localStorage.getItem(STORAGE.theme) || "light";
+    applyTheme(savedTheme);
+
+    if (chats.length > 0) {
+        chats.sort((a, b) => b.updatedAt - a.updatedAt);
+        currentChatId = chats[0].id;
+    } else {
+        createChat();
+    }
+
+    renderDocuments();
+    renderHistory();
+    renderMessages();
+    checkHealth();
+})();
+</script>
 </body>
 </html>

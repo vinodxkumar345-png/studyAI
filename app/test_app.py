@@ -86,9 +86,14 @@ def test_ask_endpoint_handles_ollama_request_error():
             )
 
     assert response.status_code == 503
+    
     assert response.json()["detail"] == (
-        "Could not retrieve information. Check Ollama and ChromaDB."
-    )
+    "Could not retrieve information. "
+    "Check Ollama, the embedding model, and ChromaDB. "
+    "See the terminal logs for details."
+)
+
+
 
 
 # --------------------------------------------------
@@ -111,7 +116,7 @@ def test_ask_endpoint_handles_unexpected_error():
 
     assert response.status_code == 503
     assert response.json()["detail"] == (
-        "Could not retrieve information. Check Ollama and ChromaDB."
+        "Could not retrieve information. Check Ollama, the embedding model, and ChromaDB. See the terminal logs for details."
     )
 
 
@@ -127,4 +132,4 @@ def test_health_endpoint():
     data = response.json()
 
     assert data["status"] == "running"
-    assert data["version"] == "1.8.0"
+    assert data["version"] == "2.1.0"
