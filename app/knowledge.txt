@@ -1,0 +1,23 @@
+Python is a programming language widely used in artificial intelligence and data science. Python supports libraries such as NumPy and pandas for data processing.
+
+Machine learning allows computers to learn patterns from data and make predictions. Supervised learning uses labeled data, while unsupervised learning discovers patterns in unlabeled data.
+
+Artificial intelligence is the field of creating systems that perform tasks requiring human intelligence. These tasks include reasoning, language understanding, and decision-making.
+
+Deep learning is a branch of machine learning that uses neural networks with multiple layers. It is widely used in image recognition, speech processing, and natural language processing.
+
+Natural language processing helps computers understand and generate human language. Applications include chatbots, translation systems, text summarization, and sentiment analysis.
+
+Retrieval-Augmented Generation combines information retrieval with text generation. A RAG system retrieves relevant documents and provides them to a language model as context for generating answers.
+
+Embeddings represent text as numerical vectors. Similar meanings can have vectors that are close together in the embedding space.
+
+ChromaDB is a vector database that stores embeddings and retrieves similar items. It can help RAG applications find relevant information efficiently.
+
+Ollama allows users to run supported AI models locally. Local models can be useful for learning and prototyping without requiring a paid model API.
+
+Python functions organize code into reusable blocks. Lists store sequences of values, dictionaries store key-value pairs, and classes help organize data and behavior.
+
+Supervised learning example: A model learns from emails labeled as spam or not spam. It uses these labeled examples to predict whether a new email is spam.
+
+Unsupervised learning example: A model groups customers with similar shopping habits without being given predefined customer categories.

@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.env
+
+# Local databases and uploaded documents
+chroma_db/
+uploads/
+*.sqlite3
+*.db
+
+# Logs and temporary files
+*.log
+.pytest_cache/
+.mypy_cache/
+
+# IDE and operating system
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

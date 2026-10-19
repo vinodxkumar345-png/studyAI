@@ -1,0 +1,21 @@
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.env
+.env.*
+!.env.example
+chroma_db/
+uploads/
+*.sqlite3
+*.db
+*.bin
+*.log
+.pytest_cache/
+
+# Experimental and backup files excluded from publishing
+app/app_backup.py
+app/evalute.py
+app/evalute_rag.py
+app/evalution_dataset.json
+app/locxal_rag.py

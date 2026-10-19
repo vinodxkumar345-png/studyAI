@@ -1,0 +1,130 @@
+[
+  {
+    "id": 1,
+    "question": "What is Python widely used for?",
+    "expected_answer": "Artificial intelligence and data science.",
+    "evaluation_type": "answerable",
+    "expected_keywords": [
+      "artificial intelligence",
+      "data science"
+    ]
+  },
+  {
+    "id": 2,
+    "question": "Which Python libraries are mentioned for data processing?",
+    "expected_answer": "NumPy and pandas.",
+    "evaluation_type": "answerable",
+    "expected_keywords": [
+      "numpy",
+      "pandas"
+    ]
+  },
+  {
+    "id": 3,
+    "question": "What is the difference between supervised and unsupervised learning?",
+    "expected_answer": "Supervised learning uses labeled data; unsupervised learning finds patterns in unlabeled data.",
+    "evaluation_type": "answerable",
+    "expected_keywords": [
+      "labeled data",
+      "unlabeled data"
+    ]
+  },
+  {
+    "id": 4,
+    "question": "What is deep learning?",
+    "expected_answer": "A branch of machine learning that uses neural networks with multiple layers.",
+    "evaluation_type": "answerable",
+    "expected_keywords": [
+      "machine learning",
+      "neural networks",
+      "multiple layers"
+    ]
+  },
+  {
+    "id": 5,
+    "question": "Name two applications of natural language processing.",
+    "expected_answer": "Chatbots, translation systems, text summarization, and sentiment analysis.",
+    "evaluation_type": "answerable",
+    "expected_keywords": [
+      "chatbots",
+      "translation systems",
+      "text summarization",
+      "sentiment analysis"
+    ]
+  },
+  {
+    "id": 6,
+    "question": "What does RAG stand for, and how does it work?",
+    "expected_answer": "Retrieval-Augmented Generation combines information retrieval with text generation and supplies retrieved documents as context to a language model.",
+    "evaluation_type": "answerable",
+    "expected_keywords": [
+      "retrieval-augmented generation",
+      "documents",
+      "context"
+    ]
+  },
+  {
+    "id": 7,
+    "question": "What are embeddings?",
+    "expected_answer": "Embeddings represent text as numerical vectors.",
+    "evaluation_type": "answerable",
+    "expected_keywords": [
+      "numerical vectors"
+    ]
+  },
+  {
+    "id": 8,
+    "question": "What is ChromaDB used for?",
+    "expected_answer": "ChromaDB stores embeddings and retrieves similar items.",
+    "evaluation_type": "answerable",
+    "expected_keywords": [
+      "stores embeddings",
+      "retrieves similar items"
+    ]
+  },
+  {
+    "id": 9,
+    "question": "What is the difference between lists and dictionaries in Python?",
+    "expected_answer": "Lists store sequences of values; dictionaries store key-value pairs.",
+    "evaluation_type": "answerable",
+    "expected_keywords": [
+      "sequences of values",
+      "key-value pairs"
+    ]
+  },
+  {
+    "id": 10,
+    "question": "How does supervised learning identify spam emails?",
+    "expected_answer": "It learns from labeled spam and non-spam emails to predict whether a new email is spam.",
+    "evaluation_type": "answerable",
+    "expected_keywords": [
+      "labeled",
+      "spam",
+      "predict"
+    ]
+  },
+  {
+    "id": 11,
+    "question": "How does unsupervised learning group customers?",
+    "expected_answer": "It groups customers with similar shopping habits without predefined categories.",
+    "evaluation_type": "answerable",
+    "expected_keywords": [
+      "similar shopping habits",
+      "predefined"
+    ]
+  },
+  {
+    "id": 12,
+    "question": "Who created Python, and in what year?",
+    "expected_answer": "The document does not provide this information.",
+    "evaluation_type": "unanswerable",
+    "expected_keywords": []
+  },
+  {
+    "id": 13,
+    "question": "What is the author's name?",
+    "expected_answer": "The document does not provide this information.",
+    "evaluation_type": "unanswerable",
+    "expected_keywords": []
+  }
+]
